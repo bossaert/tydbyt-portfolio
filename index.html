@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="tydbyt — Project portfolio by Pierre Bossaert. Prototypes built at the intersection of product, data, and design." />
+  <title>tydbyt — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #fafafa;
+      --surface:  #ffffff;
+      --border:   #e5e7eb;
+      --text-primary:   #111827;
+      --text-secondary: #6b7280;
+      --accent:   #2563eb;        /* single accent: electric blue */
+      --accent-hover: #1d4ed8;
+      --radius:   10px;
+      --shadow:   0 1px 3px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
+      --transition: 200ms ease;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    img { display: block; width: 100%; height: auto; }
+
+    /* ─── Layout ─── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,250,250,.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .nav-logo {
+      font-size: 1.1rem; font-weight: 600; letter-spacing: -.02em;
+      color: var(--text-primary);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: .875rem; font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* ─── Hero ─── */
+    .hero {
+      padding: 96px 0 80px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: .75rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 600; line-height: 1.15;
+      letter-spacing: -.03em;
+      max-width: 680px;
+    }
+    .hero p {
+      margin-top: 20px;
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      max-width: 540px;
+      line-height: 1.75;
+    }
+    .hero-cta {
+      margin-top: 36px;
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 22px;
+      font-size: .9rem; font-weight: 500;
+      border-radius: 6px;
+      transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+    }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover); color: #fff;
+      box-shadow: 0 4px 14px rgba(37,99,235,.35);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { color: var(--text-primary); border-color: #9ca3af; }
+
+    /* ─── Section Headings ─── */
+    .section { padding: 72px 0; }
+    .section-label {
+      font-size: .75rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: 1.75rem; font-weight: 600;
+      letter-spacing: -.02em;
+    }
+    .section-subtitle {
+      margin-top: 10px;
+      color: var(--text-secondary);
+      max-width: 520px;
+    }
+    .section-header { margin-bottom: 48px; }
+
+    /* ─── Project Grid ─── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex; flex-direction: column;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,.10);
+    }
+    .project-thumb {
+      aspect-ratio: 3 / 2;
+      background: #f3f4f6;
+      overflow: hidden;
+      position: relative;
+    }
+    .project-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 400ms ease;
+    }
+    .project-card:hover .project-thumb img { transform: scale(1.04); }
+
+    /* Placeholder when no thumbnail */
+    .project-thumb-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
+    }
+    .project-thumb-placeholder svg { opacity: .25; width: 48px; height: 48px; }
+
+    .project-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+    .project-tag {
+      display: inline-block;
+      font-size: .7rem; font-weight: 600;
+      letter-spacing: .09em; text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .project-title {
+      font-size: 1.05rem; font-weight: 600;
+      letter-spacing: -.01em; margin-bottom: 8px;
+    }
+    .project-desc {
+      font-size: .875rem; color: var(--text-secondary);
+      line-height: 1.65; flex: 1;
+    }
+    .project-footer {
+      margin-top: 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .project-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: .85rem; font-weight: 500;
+      color: var(--accent);
+      transition: gap var(--transition);
+    }
+    .project-link:hover { gap: 8px; }
+    .project-link svg { flex-shrink: 0; }
+
+    /* ─── About ─── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+    .about-text p { color: var(--text-secondary); margin-bottom: 16px; line-height: 1.8; }
+    .about-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .skill-tag {
+      padding: 4px 12px;
+      font-size: .8rem; font-weight: 500;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      background: var(--surface);
+    }
+    .about-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .stat-card {
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .stat-number {
+      font-size: 2rem; font-weight: 600;
+      letter-spacing: -.03em; color: var(--text-primary);
+    }
+    .stat-label { font-size: .85rem; color: var(--text-secondary); margin-top: 4px; }
+
+    /* ─── Divider ─── */
+    .divider { border: none; border-top: 1px solid var(--border); }
+
+    /* ─── Contact ─── */
+    .contact-section {
+      text-align: center;
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    .contact-section .section-title { margin: 0 auto 12px; }
+    .contact-section .section-subtitle { margin: 0 auto 32px; }
+
+    /* ─── Footer ─── */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-size: .85rem; color: var(--text-secondary); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: .85rem; color: var(--text-secondary); }
+    .footer-links a:hover { color: var(--text-primary); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .nav-links { gap: 20px; }
+      .hero { padding: 64px 0 56px; }
+      .about-stat-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .nav-links { display: none; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── Focus / Accessibility ─── */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav aria-label="Main navigation">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">tydbyt<span>.</span></a>
+        <ul class="nav-links">
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <header class="hero">
+    <div class="container">
+      <span class="hero-eyebrow">Portfolio</span>
+      <h1>Designing at the&nbsp;intersection of product&nbsp;&amp;&nbsp;data.</h1>
+      <p>
+        A collection of working prototypes built to explore ideas in financial tooling,
+        form automation, scenario planning, and personal finance.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Projects ── -->
+  <main>
+    <section class="section" id="projects" aria-labelledby="projects-heading">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-label">Work</p>
+          <h2 class="section-title" id="projects-heading">Project Prototypes</h2>
+          <p class="section-subtitle">
+            Each prototype is a live, interactive proof-of-concept. Click through to explore the full build.
+          </p>
+        </div>
+
+        <div class="projects-grid">
+
+          <!-- Card 1: IPS Generator -->
+          <article class="project-card">
+            <div class="project-thumb">
+              <div class="project-thumb-placeholder">
+                <!-- Replace with: <img src="assets/thumbs/ips-generator.png" alt="IPS Generator screenshot" loading="lazy" /> -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </div>
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Document Automation</span>
+              <h3 class="project-title">IPS Generator</h3>
+              <p class="project-desc">
+                Automated generation of Investment Policy Statements. Input client parameters and
+                produce a structured, formatted IPS document ready for review.
+              </p>
+              <div class="project-footer">
+                <a href="https://ips-generator.netlify.app" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View IPS Generator prototype (opens in new tab)">
+                  View prototype
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: Goal Base -->
+          <article class="project-card">
+            <div class="project-thumb">
+              <div class="project-thumb-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              </div>
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Financial Planning</span>
+              <h3 class="project-title">Goal Base</h3>
+              <p class="project-desc">
+                A goal-based financial planning interface. Define savings targets, timelines, and
+                track progress toward personal and investment milestones.
+              </p>
+              <div class="project-footer">
+                <a href="https://goal-base.netlify.app" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View Goal Base prototype (opens in new tab)">
+                  View prototype
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3: Scenario Builder -->
+          <article class="project-card">
+            <div class="project-thumb">
+              <div class="project-thumb-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+              </div>
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Strategy &amp; Planning</span>
+              <h3 class="project-title">Scenario Builder</h3>
+              <p class="project-desc">
+                Build and compare financial or business scenarios side-by-side. Model assumptions,
+                adjust variables, and visualise the impact on outcomes in real time.
+              </p>
+              <div class="project-footer">
+                <a href="https://scenariobuilder1.netlify.app" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View Scenario Builder prototype (opens in new tab)">
+                  View prototype
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4: Master Form Framework -->
+          <article class="project-card">
+            <div class="project-thumb">
+              <div class="project-thumb-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+              </div>
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Form Design</span>
+              <h3 class="project-title">Master Form Framework</h3>
+              <p class="project-desc">
+                A reusable, Hugo-powered framework for building complex multi-step forms.
+                Designed for scalability, validation logic, and consistent UX patterns.
+              </p>
+              <div class="project-footer">
+                <a href="https://master-form-framework.netlify.app" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View Master Form Framework prototype (opens in new tab)">
+                  View prototype
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 5: WealthByt -->
+          <article class="project-card">
+            <div class="project-thumb">
+              <div class="project-thumb-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Personal Finance</span>
+              <h3 class="project-title">WealthByt</h3>
+              <p class="project-desc">
+                A personal wealth dashboard prototype for tracking net worth, asset allocation,
+                and financial health indicators at a glance.
+              </p>
+              <div class="project-footer">
+                <a href="https://wealthbyt.netlify.app" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View WealthByt prototype (opens in new tab)">
+                  View prototype
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 6: PayExtract -->
+          <article class="project-card">
+            <div class="project-thumb">
+              <div class="project-thumb-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/></svg>
+              </div>
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Data Extraction</span>
+              <h3 class="project-title">PayExtract</h3>
+              <p class="project-desc">
+                Upload payslips or payment documents and automatically extract structured data —
+                gross pay, deductions, net amounts — for downstream processing.
+              </p>
+              <div class="project-footer">
+                <a href="https://payextract.netlify.app" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View PayExtract prototype (opens in new tab)">
+                  View prototype
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div><!-- /.projects-grid -->
+      </div>
+    </section>
+
+    <!-- ── About ── -->
+    <section class="section" id="about" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);" aria-labelledby="about-heading">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-text">
+            <p class="section-label">About</p>
+            <h2 class="section-title" id="about-heading">Building ideas into working&nbsp;products.</h2>
+            <p style="margin-top:20px;">
+              I'm Pierre Bossaert — a product-minded builder who turns ideas into interactive prototypes.
+              My work spans financial tooling, document automation, and data-driven dashboards.
+            </p>
+            <p>
+              Each project here started as a rough idea and became a functional proof-of-concept.
+              I work across the full stack — from UX wireframe to deployed application.
+            </p>
+            <div class="about-skills">
+              <span class="skill-tag">Product Design</span>
+              <span class="skill-tag">HTML / CSS / JS</span>
+              <span class="skill-tag">Hugo</span>
+              <span class="skill-tag">Netlify</span>
+              <span class="skill-tag">Financial UX</span>
+              <span class="skill-tag">Data Visualisation</span>
+              <span class="skill-tag">Rapid Prototyping</span>
+            </div>
+          </div>
+          <div class="about-stat-grid">
+            <div class="stat-card">
+              <div class="stat-number">25+</div>
+              <div class="stat-label">Prototypes deployed on Netlify</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">6</div>
+              <div class="stat-label">Featured projects</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">2+</div>
+              <div class="stat-label">Years of rapid prototyping</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">0</div>
+              <div class="stat-label">Downtime — deployed on Netlify edge</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Contact ── -->
+    <section class="contact-section" id="contact" aria-labelledby="contact-heading">
+      <div class="container">
+        <p class="section-label">Contact</p>
+        <h2 class="section-title" id="contact-heading">Interested in collaborating?</h2>
+        <p class="section-subtitle">
+          I'm open to conversations about product, prototyping, and financial tooling.
+        </p>
+        <!-- Replace href with your real email -->
+        <a href="mailto:hello@tydbyt.com" class="btn btn-primary">Say hello →</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <p class="footer-copy">© 2026 tydbyt.com — Pierre Bossaert</p>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="#projects">Projects</a>
+          <a href="#about">About</a>
+          <a href="mailto:hello@tydbyt.com">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
